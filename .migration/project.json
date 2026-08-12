@@ -1,0 +1,12 @@
+{
+  "sites": {
+    "aem-ui-training": {
+      "previewOrg": "eds-as-2026",
+      "previewSite": "aem-ui-training",
+      "aemSitePath": "/content/aem-ui-training",
+      "aemAssetsFolderPath": "/content/dam/aem-ui-training",
+      "aemSiteName": "aem-ui-training",
+      "aemSiteTitle": "AEM Demo Site UE"
+    }
+  }
+}

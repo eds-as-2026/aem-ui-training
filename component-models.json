@@ -190,6 +190,50 @@
     ]
   },
   {
+    "id": "hero-carousel-slide",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme",
+        "label": "Theme",
+        "value": "light",
+        "options": [
+          {
+            "name": "Light",
+            "value": "light"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "description": "Optional CSS color (e.g. #0b3d2e) used as the slide background"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "text",
+        "value": "",
+        "label": "Content",
+        "description": "Eyebrow, heading and description. Add a link on its own line and format it bold for a primary CTA or italic for a secondary CTA; use a separate line per CTA."
+      }
+    ]
+  },
+  {
     "id": "hero",
     "fields": [
       {

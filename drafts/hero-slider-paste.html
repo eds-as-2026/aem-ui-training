@@ -1,21 +1,26 @@
 <!--
-  Hero Slider — paste-ready content page.
+  Hero Slider — COMPLETE 12-slide paste-ready content page.
 
   HOW TO USE
-  1. Open this file in a browser, select all (Cmd/Ctrl+A), copy.
-  2. Paste into your Universal Editor page (or Google Docs / Word doc source),
-     OR create a new page and add a "Hero Slider" block, then add one "Slide"
-     item per table row below and fill the fields.
+  1. Upload the assets staged in .migration/kia-assets/ into AEM Assets, e.g. the folder:
+       /content/dam/aem-ui-training/hero-slider/
+     (the media paths below assume that folder — change them if you upload elsewhere).
+  2. Open this file in a browser, select all (Cmd/Ctrl+A), copy, and paste into your
+     Universal Editor page / doc source; OR create a new page, add a "Hero Slider" block,
+     add one "Slide" item per table row, and fill the fields.
 
   TABLE FORMAT (matches the block model)
   - Row 1: block name ("Hero Slider").
   - Each following row = one Slide, columns in this order:
-      1) Desktop media   — an image; OR for a background video, a link to an .mp4
+      1) Desktop media   — an <img> for image slides; a LINK to an .mp4 for video slides
       2) Mobile media    — optional image/video shown below 769px (falls back to desktop)
       3) Content         — heading (title), paragraph (tagline), and a link (CTA button)
       4) Disclaimer      — optional fine print
 
-  Replace the placeholder image URLs with your re-hosted Kia assets before publishing.
+  NOTES
+  - Video slides use a link to the .mp4 in the media columns (the block detects video by extension).
+  - Slide 3 (Seltos BNCAP) intentionally has no title/tagline in the source — CTA only.
+  - Replace /content/dam/aem-ui-training/hero-slider/ if your DAM folder differs.
 -->
 <body>
   <main>
@@ -24,9 +29,11 @@
         <tr>
           <td colspan="4">Hero Slider</td>
         </tr>
+
+        <!-- 1. Sorento (video) -->
         <tr>
-          <td><img src="https://placehold.co/1600x1050/05141f/ffffff.png?text=Sorento" alt="The Kia Sorento"></td>
-          <td><img src="https://placehold.co/750x1334/05141f/ffffff.png?text=Sorento" alt="The Kia Sorento"></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/sorento-desktop.mp4">Sorento desktop video</a></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/sorento-mobile.mp4">Sorento mobile video</a></td>
           <td>
             <h3>The Kia Sorento</h3>
             <p>Global Icon. India Bound.</p>
@@ -34,9 +41,11 @@
           </td>
           <td></td>
         </tr>
+
+        <!-- 2. Syros EV (image) -->
         <tr>
-          <td><img src="https://placehold.co/1600x1050/123047/ffffff.png?text=Syros+EV" alt="The Kia Syros EV"></td>
-          <td><img src="https://placehold.co/750x1334/123047/ffffff.png?text=Syros+EV" alt="The Kia Syros EV"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/syros-ev-desktop.jpg" alt="The Kia Syros EV"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/syros-ev-mobile.jpg" alt="The Kia Syros EV"></td>
           <td>
             <h3>The Kia Syros EV</h3>
             <p>Superior beyond belief.</p>
@@ -44,9 +53,33 @@
           </td>
           <td></td>
         </tr>
+
+        <!-- 3. Seltos BNCAP (image, CTA only) -->
         <tr>
-          <td><img src="https://placehold.co/1600x1050/1c4a3f/ffffff.png?text=All-new+Seltos" alt="The all-new Seltos"></td>
-          <td><img src="https://placehold.co/750x1334/1c4a3f/ffffff.png?text=All-new+Seltos" alt="The all-new Seltos"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/seltos-bncap-desktop.jpg" alt="All-new Seltos safety rating"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/seltos-bncap-mobile.jpg" alt="All-new Seltos safety rating"></td>
+          <td>
+            <p><a href="/in/our-vehicles/seltos/showroom.html">Know More</a></p>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- 4. 2026 Syros (image) -->
+        <tr>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/syros-2026-desktop.jpg" alt="Presenting The 2026 Kia Syros"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/syros-2026-mobile.jpg" alt="Presenting The 2026 Kia Syros"></td>
+          <td>
+            <h3>Presenting The 2026 Kia Syros.</h3>
+            <p>Made for your world. And everyone in it.</p>
+            <p><a href="/in/our-vehicles/syros/showroom.html">Know More</a></p>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- 5. All-new Seltos (image) -->
+        <tr>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/seltos-desktop.jpg" alt="The all-new Seltos"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/seltos-mobile.jpg" alt="The all-new Seltos"></td>
           <td>
             <h3>The all-new Seltos</h3>
             <p>Badass. Forever.</p>
@@ -55,9 +88,35 @@
           </td>
           <td></td>
         </tr>
+
+        <!-- 6. Carens Clavis EV (video) -->
         <tr>
-          <td><img src="https://placehold.co/1600x1050/3a2a12/ffffff.png?text=EV9" alt="The Kia EV9"></td>
-          <td><img src="https://placehold.co/750x1334/3a2a12/ffffff.png?text=EV9" alt="The Kia EV9"></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/carens-clavis-ev-desktop.mp4">Carens Clavis EV desktop video</a></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/carens-clavis-ev-mobile.mp4">Carens Clavis EV mobile video</a></td>
+          <td>
+            <h3>The Carens Clavis EV</h3>
+            <p>It’s an E.We</p>
+            <p><a href="/in/our-vehicles/carens-clavis-ev/showroom.html">Know More</a></p>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- 7. Carens Clavis (image) -->
+        <tr>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/carens-clavis-desktop.jpg" alt="The Carens Clavis"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/carens-clavis-mobile.jpg" alt="The Carens Clavis"></td>
+          <td>
+            <h3>The Carens Clavis</h3>
+            <p>For epic journeys.</p>
+            <p><a href="/in/our-vehicles/carens-clavis/showroom.html">Know More</a></p>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- 8. EV9 (video) -->
+        <tr>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/ev9-desktop.mp4">EV9 desktop video</a></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/ev9-mobile.mp4">EV9 mobile video</a></td>
           <td>
             <h3>The Kia EV9</h3>
             <p>The World's Most Inspiring Electric. Ever.</p>
@@ -65,15 +124,53 @@
           </td>
           <td>Disclaimer: The product shown in the visual is for representation purpose only. Colour, feature, and actual product may vary. Please check with your local Kia dealer for more details.</td>
         </tr>
+
+        <!-- 9. Carnival (video) -->
         <tr>
-          <td><img src="https://placehold.co/1600x1050/2a1230/ffffff.png?text=Carnival" alt="The new Kia Carnival Limousine"></td>
-          <td><img src="https://placehold.co/750x1334/2a1230/ffffff.png?text=Carnival" alt="The new Kia Carnival Limousine"></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/carnival-desktop.mp4">Carnival desktop video</a></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/carnival-mobile.mp4">Carnival mobile video</a></td>
           <td>
             <h3>The new Kia Carnival Limousine</h3>
             <p>Your own luxury liner.</p>
             <p><a href="/in/our-vehicles/carnival/showroom.html">Know More</a></p>
           </td>
           <td>Disclaimer: The product shown in the visual is for representation purpose only. Colour, feature, and actual product may vary.</td>
+        </tr>
+
+        <!-- 10. Sonet (video) -->
+        <tr>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/sonet-desktop.mp4">Sonet desktop video</a></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/sonet-mobile.mp4">Sonet mobile video</a></td>
+          <td>
+            <h3>New Sonet</h3>
+            <p>The Wild. Reborn.</p>
+            <p><a href="/in/our-vehicles/sonet/showroom.html">Know More</a></p>
+          </td>
+          <td>#T&amp;C Apply. Ex-showroom price all India</td>
+        </tr>
+
+        <!-- 11. Carens (image) -->
+        <tr>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/carens-desktop.jpg" alt="Kia Carens"></td>
+          <td><img src="/content/dam/aem-ui-training/hero-slider/carens-mobile.jpg" alt="Kia Carens"></td>
+          <td>
+            <h3>Kia Carens</h3>
+            <p>From a different world.</p>
+            <p><a href="/in/our-vehicles/carens/showroom.html">Know More</a></p>
+          </td>
+          <td></td>
+        </tr>
+
+        <!-- 12. EV6 (video) -->
+        <tr>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/ev6-desktop.mp4">EV6 desktop video</a></td>
+          <td><a href="/content/dam/aem-ui-training/hero-slider/ev6-mobile.mp4">EV6 mobile video</a></td>
+          <td>
+            <h3>Kia EV6</h3>
+            <p>The Electric Superstar</p>
+            <p><a href="/in/our-vehicles/ev6/showroom.html">Know More</a></p>
+          </td>
+          <td></td>
         </tr>
       </table>
     </div>

@@ -3,6 +3,7 @@
  * Values pulled from live computed styles at 375px and 1440px.
  * Single breakpoint at 768/769px, mobile-first.
  * Typography uses the source's Kia Signature font, self-hosted below.
+ * rev: 2
  */
 
 @font-face {

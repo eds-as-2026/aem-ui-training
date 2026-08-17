@@ -45,5 +45,11 @@
     "components": [
       "hero-carousel-slide"
     ]
+  },
+  {
+    "id": "hero-slider",
+    "components": [
+      "hero-slider-slide"
+    ]
   }
 ]

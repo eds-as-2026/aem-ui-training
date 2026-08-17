@@ -262,7 +262,9 @@ export default function decorate(block) {
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let current = 0;
-  let playing = !reduceMotion;
+  // The source carousel does not auto-advance; it only moves on user action.
+  // Start paused so slides never change on their own.
+  let playing = false;
   let timer;
 
   function announce(i) {
@@ -286,6 +288,8 @@ export default function decorate(block) {
 
   function show(index) {
     current = (index + slides.length) % slides.length;
+    // slide the track horizontally to the active slide
+    list.style.transform = `translateX(-${current * 100}%)`;
     slides.forEach((slide, i) => {
       const active = i === current;
       slide.classList.toggle('is-active', active);

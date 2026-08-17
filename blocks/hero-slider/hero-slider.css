@@ -21,14 +21,6 @@
   src: url('/fonts/kia-signature-regular.woff2') format('woff2');
 }
 
-@font-face {
-  font-family: kia-signature;
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-  src: url('/fonts/kia-signature-light.woff2') format('woff2');
-}
-
 .hero-slider {
   /* measured Kia values as custom properties (mobile-first defaults) */
   --hero-slider-aspect: 375 / 667;

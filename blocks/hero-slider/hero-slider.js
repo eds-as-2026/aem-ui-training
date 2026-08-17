@@ -3,6 +3,7 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 
 const AUTOPLAY_DELAY = 6000;
 const VIDEO_EXT = /\.(mp4|webm|ogg|mov)(\?.*)?$/i;
+const IMAGE_EXT = /\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/i;
 
 /**
  * Returns true when the given URL points at a video file.
@@ -10,6 +11,16 @@ const VIDEO_EXT = /\.(mp4|webm|ogg|mov)(\?.*)?$/i;
  */
 function isVideo(url) {
   return !!url && VIDEO_EXT.test(url);
+}
+
+/**
+ * True when a URL points at an asset we treat as slide media
+ * (image, video, or a DAM asset path) rather than a navigational CTA link.
+ * @param {string} url
+ */
+function isAssetUrl(url) {
+  if (!url) return false;
+  return VIDEO_EXT.test(url) || IMAGE_EXT.test(url) || url.includes('/content/dam/');
 }
 
 /**
@@ -83,26 +94,35 @@ function buildMedia(desktopSrc, mobileSrc, alt, poster, eager) {
  */
 function mediaSrc(cell) {
   if (!cell) return '';
-  const a = cell.querySelector('a');
-  if (a) return a.getAttribute('href');
   const img = cell.querySelector('img');
   if (img) return img.getAttribute('src');
+  const a = cell.querySelector('a[href]');
+  if (a && isAssetUrl(a.getAttribute('href'))) return a.getAttribute('href');
   return '';
 }
 
-/** True when a cell holds authored copy (heading or paragraph). */
-function isContentCell(cell) {
-  return !!cell && !!cell.querySelector('h1, h2, h3, h4, h5, h6, p, ul, ol');
-}
-
 /**
- * True when a cell is purely media: an <img>, or a bare asset/video link whose
- * only child is an <a> (not a content cell that happens to contain a CTA link).
+ * True when a cell is media: it contains an <img>, or a link whose target is an
+ * asset (image/video/DAM path). This is independent of how EDS wraps the link
+ * (e.g. in a <p class="button-container">), so a media cell is never mistaken
+ * for content just because its link got wrapped in a paragraph.
  * @param {Element} cell
  */
 function isMediaCell(cell) {
-  if (!cell || isContentCell(cell)) return false;
-  return !!cell.querySelector('img') || !!cell.querySelector('a[href]');
+  if (!cell) return false;
+  if (cell.querySelector('img')) return true;
+  const a = cell.querySelector('a[href]');
+  return !!a && isAssetUrl(a.getAttribute('href'));
+}
+
+/**
+ * True when a cell holds authored copy (heading or text) and is not media.
+ * @param {Element} cell
+ */
+function isContentCell(cell) {
+  if (!cell || isMediaCell(cell)) return false;
+  return !!cell.querySelector('h1, h2, h3, h4, h5, h6, p, ul, ol')
+    || !!cell.textContent.trim();
 }
 
 function buildSlide(row, index) {

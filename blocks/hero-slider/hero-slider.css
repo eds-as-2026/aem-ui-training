@@ -142,9 +142,8 @@
   font-weight: 400;
 }
 
-/* CTA button (measured: square corners; colour alternates per slide).
-   Odd slides = white fill / black text; even slides = navy fill / white text,
-   matching the Kia source where every other slide uses the dark button. */
+/* CTA button (measured: square corners). Light (white) is the base style;
+   dark (navy) is applied per slide via [data-button="dark"] below. */
 .hero-slider-content a.button {
   display: inline-block;
   margin-top: var(--hero-slider-cta-margin);
@@ -165,7 +164,8 @@
   opacity: 0.9;
 }
 
-.hero-slider-slide:nth-child(even) .hero-slider-content a.button {
+/* per-slide button style (author-controlled): dark = navy fill / white text */
+.hero-slider-slide[data-button="dark"] .hero-slider-content a.button {
   border-color: #05141f;
   background-color: #05141f;
   color: #fff;
@@ -213,22 +213,30 @@
   pointer-events: none;
 }
 
-/* slim chevron glyph (~14px, thin 2px stroke), matching the source */
+/* chevron glyph — thin SVG chevron in white, matching the source's icon font
+   (prev \E003 / next \E002 rendered at 1.25rem). Uses mask so colour is white. */
 .hero-slider-arrow::before {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 14px;
-  height: 14px;
-  border: solid #fff;
-  border-width: 2px 2px 0 0;
+  width: 20px;
+  height: 30px;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  mask: center / contain no-repeat;
+}
+
+.hero-slider-prev::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 30"><path fill="none" stroke="black" stroke-width="2" d="M14 4 L6 15 L14 26"/></svg>');
+}
+
+.hero-slider-next::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 30"><path fill="none" stroke="black" stroke-width="2" d="M6 4 L14 15 L6 26"/></svg>');
 }
 
 .hero-slider-prev { left: 40px; }
 .hero-slider-next { right: 40px; }
-.hero-slider-prev::before { transform: translate(-35%, -50%) rotate(-135deg); }
-.hero-slider-next::before { transform: translate(-65%, -50%) rotate(45deg); }
 
 /* pagination --------------------------------------------------------------- */
 .hero-slider-pagination {

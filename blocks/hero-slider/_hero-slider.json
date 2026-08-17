@@ -57,7 +57,7 @@
           "name": "text",
           "value": "",
           "label": "Content",
-          "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. Alt text for images is taken from the title automatically."
+          "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. The button is dark (navy) by default; italicise the CTA link to make it the light (white) button. Alt text for images is taken from the title automatically."
         },
         {
           "component": "richtext",
@@ -65,7 +65,7 @@
           "name": "disclaimer",
           "value": "",
           "label": "Disclaimer",
-          "description": "Optional fine print shown at the bottom of the slide."
+          "description": "Optional fine print shown at the bottom of the slide. Supports multiple lines / rich text."
         }
       ]
     }

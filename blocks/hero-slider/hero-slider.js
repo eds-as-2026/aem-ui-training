@@ -133,13 +133,17 @@ function buildSlide(row, index) {
   // Content is resolved first so a CTA link inside it is never mistaken for media.
   const contentCell = cells.find(isContentCell);
   const mediaCells = cells.filter(isMediaCell);
-  // a non-empty, non-media, non-content cell is treated as the disclaimer
+  // remaining non-media, non-content text cell is the disclaimer
   const disclaimerCell = cells.find(
     (c) => c !== contentCell && !isMediaCell(c) && !isContentCell(c) && c.textContent.trim(),
   );
 
+  // Button colour: dark (navy) by default; an italicised CTA link makes it light.
+  const buttonStyle = contentCell?.querySelector('em a, a em, i a, a i') ? 'light' : 'dark';
+
   const slide = document.createElement('li');
   slide.className = 'hero-slider-slide';
+  slide.dataset.button = buttonStyle;
   slide.setAttribute('role', 'group');
   slide.setAttribute('aria-roledescription', 'Slide');
   moveInstrumentation(row, slide);

@@ -34,17 +34,21 @@ function buildMedia(desktopSrc, mobileSrc, alt, poster, eager) {
     video.autoplay = true;
     video.playsInline = true;
     video.setAttribute('playsinline', '');
-    video.preload = 'none';
+    // First slide loads a frame immediately so it is never blank (no poster);
+    // later slides stay lazy until activated.
+    video.preload = eager ? 'metadata' : 'none';
     video.setAttribute('aria-label', alt || '');
     if (poster) video.poster = poster;
 
+    // append a media fragment so a first frame renders even before playback
+    const frameHint = desktopSrc.includes('#') ? '' : '#t=0.1';
     const deskSource = document.createElement('source');
-    deskSource.src = desktopSrc;
+    deskSource.src = desktopSrc + frameHint;
     deskSource.media = '(min-width: 769px)';
     video.append(deskSource);
 
     const mobSource = document.createElement('source');
-    mobSource.src = mobileSrc || desktopSrc;
+    mobSource.src = (mobileSrc || desktopSrc) + frameHint;
     mobSource.media = '(max-width: 768px)';
     video.append(mobSource);
 

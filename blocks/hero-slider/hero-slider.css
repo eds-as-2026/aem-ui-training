@@ -214,7 +214,13 @@
 
 .hero-slider-arrow:hover,
 .hero-slider-arrow:focus-visible {
-  background-color: rgb(0 0 0 / 35%);
+  background-color: rgb(0 0 0); /* solid black on hover, matching the source */
+}
+
+/* non-looping: hide the arrow that has nowhere to go (first/last slide) */
+.hero-slider-arrow[disabled] {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* chevron glyph */

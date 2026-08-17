@@ -298,6 +298,9 @@ export default function decorate(block) {
       b.setAttribute('aria-selected', String(active));
       b.tabIndex = active ? 0 : -1;
     });
+    // non-looping arrows: hide prev on the first slide, next on the last
+    prev.disabled = current === 0;
+    next.disabled = current === slides.length - 1;
     announce(current);
     playActiveVideo();
   }

@@ -6,7 +6,8 @@
       "aemSitePath": "/content/aem-ui-training",
       "aemAssetsFolderPath": "/content/dam/aem-ui-training",
       "aemSiteName": "aem-ui-training",
-      "aemSiteTitle": "AEM Demo Site UE"
+      "aemSiteTitle": "AEM Demo Site UE",
+      "baseUrl": "https://main--aem-ui-training--eds-as-2026.aem.page/"
     }
   }
 }

@@ -72,9 +72,47 @@ function buildMedia(desktopSrc, mobileSrc, alt, poster, eager) {
  * @param {Element} row the authored row
  * @param {number} index zero-based slide index
  */
+/**
+ * Reads a media URL from a cell: prefers an <a href> (asset/video link),
+ * then an <img src>. Returns '' when the cell has no media.
+ * @param {Element} cell
+ */
+function mediaSrc(cell) {
+  if (!cell) return '';
+  const a = cell.querySelector('a');
+  if (a) return a.getAttribute('href');
+  const img = cell.querySelector('img');
+  if (img) return img.getAttribute('src');
+  return '';
+}
+
+/** True when a cell holds authored copy (heading or paragraph). */
+function isContentCell(cell) {
+  return !!cell && !!cell.querySelector('h1, h2, h3, h4, h5, h6, p, ul, ol');
+}
+
+/**
+ * True when a cell is purely media: an <img>, or a bare asset/video link whose
+ * only child is an <a> (not a content cell that happens to contain a CTA link).
+ * @param {Element} cell
+ */
+function isMediaCell(cell) {
+  if (!cell || isContentCell(cell)) return false;
+  return !!cell.querySelector('img') || !!cell.querySelector('a[href]');
+}
+
 function buildSlide(row, index) {
   const cells = [...row.children];
-  const [mediaCell, mobileCell, textCell, disclaimerCell] = cells;
+
+  // Detect cells by their content instead of relying on a rigid column order,
+  // so the block is resilient to how authors fill the table (empty cells, etc.).
+  // Content is resolved first so a CTA link inside it is never mistaken for media.
+  const contentCell = cells.find(isContentCell);
+  const mediaCells = cells.filter(isMediaCell);
+  // a non-empty, non-media, non-content cell is treated as the disclaimer
+  const disclaimerCell = cells.find(
+    (c) => c !== contentCell && !isMediaCell(c) && !isContentCell(c) && c.textContent.trim(),
+  );
 
   const slide = document.createElement('li');
   slide.className = 'hero-slider-slide';
@@ -82,28 +120,21 @@ function buildSlide(row, index) {
   slide.setAttribute('aria-roledescription', 'Slide');
   moveInstrumentation(row, slide);
 
-  // resolve media urls: prefer <a href> (video/asset link), else <img src>
-  const resolveSrc = (cell) => {
-    if (!cell) return '';
-    const a = cell.querySelector('a');
-    if (a) return a.getAttribute('href');
-    const img = cell.querySelector('img');
-    if (img) return img.getAttribute('src');
-    const txt = cell.textContent.trim();
-    return txt || '';
-  };
-  const desktopSrc = resolveSrc(mediaCell);
-  const mobileSrc = resolveSrc(mobileCell);
-  const poster = mediaCell?.querySelector('img')?.getAttribute('src');
+  // first media cell = desktop, second (if any) = mobile
+  const desktopCell = mediaCells[0];
+  const mobileCell = mediaCells[1];
+  const desktopSrc = mediaSrc(desktopCell);
+  const mobileSrc = mediaSrc(mobileCell);
+  const poster = desktopCell?.querySelector('img')?.getAttribute('src');
 
-  // content (title / tagline / CTA) comes from the text cell
+  // content (title / tagline / CTA)
   const content = document.createElement('div');
   content.className = 'hero-slider-content';
   const inner = document.createElement('div');
   inner.className = 'hero-slider-wrap';
-  if (textCell) {
-    moveInstrumentation(textCell, inner);
-    while (textCell.firstElementChild) inner.append(textCell.firstElementChild);
+  if (contentCell) {
+    moveInstrumentation(contentCell, inner);
+    while (contentCell.firstElementChild) inner.append(contentCell.firstElementChild);
   }
   content.append(inner);
 
@@ -111,7 +142,7 @@ function buildSlide(row, index) {
   const title = inner.querySelector('h1, h2, h3, h4, h5, h6');
   const altText = title ? title.textContent.trim() : `Slide ${index + 1}`;
 
-  // style the CTA link as a button
+  // style the CTA link(s) as buttons
   inner.querySelectorAll('a').forEach((a) => a.classList.add('button'));
 
   const media = buildMedia(desktopSrc, mobileSrc, altText, poster, index === 0);

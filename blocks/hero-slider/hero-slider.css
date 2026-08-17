@@ -2,7 +2,32 @@
  * Hero Slider — migrated from kia.com/in/home.html (#hero-car).
  * Values pulled from live computed styles at 375px and 1440px.
  * Single breakpoint at 768/769px, mobile-first.
+ * Typography uses the source's Kia Signature font, self-hosted below.
  */
+
+@font-face {
+  font-family: kia-signature;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/kia-signature-bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: kia-signature;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/kia-signature-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: kia-signature;
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/kia-signature-light.woff2') format('woff2');
+}
 
 .hero-slider {
   /* measured Kia values as custom properties (mobile-first defaults) */
@@ -15,10 +40,12 @@
   --hero-slider-tagline-line: 18px;
   --hero-slider-cta-margin: 30px;
   --hero-slider-text-color: #fff;
+  --hero-slider-font: kia-signature, roboto, roboto-fallback, sans-serif;
 
   position: relative;
   overflow: hidden;
   color: var(--hero-slider-text-color);
+  font-family: var(--hero-slider-font);
 }
 
 .hero-slider-container .hero-slider-wrapper {
@@ -116,6 +143,7 @@
 .hero-slider-content h6 {
   margin: 0;
   color: inherit;
+  font-family: var(--hero-slider-font);
   font-size: var(--hero-slider-title-size);
   line-height: var(--hero-slider-title-line);
   font-weight: 700;
@@ -125,6 +153,7 @@
 .hero-slider-content p {
   margin: 7px 0;
   color: inherit;
+  font-family: var(--hero-slider-font);
   font-size: var(--hero-slider-tagline-size);
   line-height: var(--hero-slider-tagline-line);
   font-weight: 400;
@@ -141,6 +170,7 @@
   padding: 18px 40px 19px;
   background-color: #fff;
   color: #000;
+  font-family: var(--hero-slider-font);
   font-size: 14px;
   line-height: 21px;
   font-weight: 700;

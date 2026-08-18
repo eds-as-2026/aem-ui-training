@@ -179,38 +179,55 @@ footer .footer .footer-social-link:hover {
   opacity: 0.7;
 }
 
-/* ── Bottom legal band ── */
+/* ── Bottom legal band (matches Kia — no divider line) ── */
 /* stylelint-disable no-descending-specificity */
 footer .footer .footer-legal {
-  margin: 0 80px;
-  padding-top: 24px;
-  border-top: 1px solid rgb(255 255 255 / 20%);
-  font-size: 14px;
-  line-height: 22px;
-  color: rgb(255 255 255 / 60%);
-  text-align: left;
+  margin: 40px 80px 0;
+  padding-top: 0;
+  font-size: 12.8px;
+  line-height: 18px;
+  color: rgb(255 255 255 / 40%);
 }
 
-/* Bottom band (matches Kia): Home icon pinned left, the contact/copyright
-   block centred across the row. Neutralise the default EDS content wrapper. */
+/* Home breadcrumb pinned left; contact block centred across the row.
+   Neutralise the default EDS content wrapper. */
 footer .footer .footer-legal > div {
   position: relative;
   max-width: none;
   margin: 0;
   padding: 0;
   display: block;
+  min-height: 24px;
 }
 
 footer .footer .footer-legal p {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
 }
 
-/* Home icon absolutely pinned to the left edge of the band */
+/* Home breadcrumb: icon then "Home" text, pinned to the left edge */
 footer .footer .footer-legal-home {
   position: absolute;
   left: 0;
   top: 0;
   margin: 0;
+}
+
+footer .footer .footer-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgb(255 255 255 / 60%);
+  font-size: 12.8px;
+}
+
+footer .footer .footer-home-link svg {
+  width: 18px;
+  height: 18px;
+  fill: currentcolor;
+}
+
+footer .footer .footer-home-link:hover {
+  color: rgb(255 255 255);
 }
 
 /* centred contact block */
@@ -219,7 +236,7 @@ footer .footer .footer-legal-contact {
 }
 
 footer .footer .footer-legal-contact p {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
 }
 
 /* assistance line + copyright share one centred row */
@@ -232,22 +249,6 @@ footer .footer .footer-legal-row {
 
 footer .footer .footer-legal-row p {
   margin: 0;
-}
-
-footer .footer .footer-home-link {
-  display: inline-block;
-  color: rgb(255 255 255 / 80%);
-}
-
-footer .footer .footer-home-link svg {
-  display: block;
-  width: 20px;
-  height: 20px;
-  fill: currentcolor;
-}
-
-footer .footer .footer-home-link:hover {
-  color: rgb(255 255 255);
 }
 
 footer .footer .footer-legal a {

@@ -117,7 +117,8 @@ export default async function decorate(block) {
       const homeLink = homePara.querySelector('a');
       const label = homeLink.textContent.trim();
       homeLink.setAttribute('aria-label', label);
-      homeLink.innerHTML = `${HOME_ICON}<span class="footer-visually-hidden">${label}</span>`;
+      // icon followed by the visible "Home" label, like Kia
+      homeLink.innerHTML = `${HOME_ICON}<span class="footer-home-label">${label}</span>`;
       homeLink.classList.add('footer-home-link');
       homePara.classList.add('footer-legal-home');
     }

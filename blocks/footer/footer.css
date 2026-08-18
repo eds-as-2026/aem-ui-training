@@ -188,10 +188,21 @@ footer .footer .footer-legal {
   font-size: 14px;
   line-height: 22px;
   color: rgb(255 255 255 / 60%);
+  text-align: left;
+}
+
+/* Neutralise the default EDS content wrapper so the band stays a simple,
+   left-aligned vertical stack (Home icon → assistance → copyright → EV line) */
+footer .footer .footer-legal > div {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: block;
 }
 
 footer .footer .footer-legal p {
   margin: 0 0 6px;
+  text-align: left;
 }
 
 footer .footer .footer-home-link {

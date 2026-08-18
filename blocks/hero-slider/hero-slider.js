@@ -173,12 +173,24 @@ function buildSlide(row, index) {
   const title = inner.querySelector('h1, h2, h3, h4, h5, h6');
   const altText = title ? title.textContent.trim() : `Slide ${index + 1}`;
 
-  // style the CTA link(s) as buttons
+  // style the CTA link(s) as buttons — but never a paragraph that is really
+  // fine print (see disclaimer detection below)
+  const isDisclaimerText = (el) => /^\s*(disclaimer|#?t&?c|terms|\*)/i.test(el.textContent.trim());
+
+  // Fallback: if disclaimer text was typed into Content instead of the
+  // Disclaimer field, detect those paragraphs and render them as fine print
+  // so they never show at tagline size.
+  inner.querySelectorAll('p').forEach((p) => {
+    if (!p.querySelector('a') && isDisclaimerText(p)) {
+      p.classList.add('hero-slider-disclaimer');
+    }
+  });
+
   inner.querySelectorAll('a').forEach((a) => a.classList.add('button'));
 
   const media = buildMedia(desktopSrc, mobileSrc, altText, poster, index === 0);
 
-  // optional disclaimer — flows within the content, below the CTA (matches source)
+  // preferred: dedicated Disclaimer field — flows below the CTA (matches source)
   const disclaimerText = disclaimerCell?.textContent.trim();
   if (disclaimerText) {
     const disc = document.createElement('p');

@@ -239,9 +239,9 @@
   mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" stroke-linecap="square" d="M3 12 H20 M13 5 L20 12 L13 19"/></svg>');
 }
 
-/* arrows fully inset from the edges (visible in every context incl. editor) */
-.hero-slider-prev { left: 24px; }
-.hero-slider-next { right: 24px; }
+/* arrows inset 40px from each edge (matches the source's on-screen position) */
+.hero-slider-prev { left: 40px; }
+.hero-slider-next { right: 40px; }
 
 /* visually-hidden live region */
 .hero-slider-live {

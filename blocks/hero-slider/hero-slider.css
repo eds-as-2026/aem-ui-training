@@ -90,10 +90,6 @@
   object-fit: cover;
 }
 
-/* desktop / mobile image swap (single breakpoint) */
-.hero-slider-desktop { display: none; }
-.hero-slider-mobile { display: block; }
-
 /* content ------------------------------------------------------------------ */
 .hero-slider-content {
   position: absolute;
@@ -171,7 +167,8 @@
   color: #fff;
 }
 
-/* disclaimer — flows within content below the CTA (matches source: 10px, left) */
+/* disclaimer — flows within content below the CTA (10px). Alignment is
+   author-controlled per slide via [data-disclaimer-align]. */
 .hero-slider-disclaimer.hero-slider-disclaimer {
   margin: 16px 0 0;
   color: var(--hero-slider-text-color);
@@ -180,6 +177,14 @@
   line-height: 15px;
   font-weight: 400;
   text-align: left;
+}
+
+.hero-slider-slide[data-disclaimer-align="center"] .hero-slider-disclaimer {
+  text-align: center;
+}
+
+.hero-slider-slide[data-disclaimer-align="right"] .hero-slider-disclaimer {
+  text-align: right;
 }
 
 /* arrows (measured: 80x80 translucent circles, vertically centred) --------- */
@@ -262,9 +267,6 @@
     --hero-slider-tagline-line: 42px;
     --hero-slider-cta-margin: 40px;
   }
-
-  .hero-slider-desktop { display: block; }
-  .hero-slider-mobile { display: none; }
 
   .hero-slider-arrow { display: block; }
 }

@@ -23,20 +23,21 @@ function isAssetUrl(url) {
 }
 
 /**
- * Builds a responsive media element (picture or video) for a slide.
- * Desktop and mobile sources are swapped with a single 769px breakpoint.
- * Videos are lazy (preload="none"), muted, inline and get a poster.
- * @param {string} desktopSrc primary media (image or video) URL
- * @param {string} mobileSrc optional mobile media URL
+ * Builds the media element (picture or video) for a slide from a single source.
+ * Videos are muted, inline, and lazy except the first slide (which preloads a
+ * frame so it is never blank). Images use responsive optimized sources.
+ * @param {string} src media (image or video) URL
+ * @param {string} unused kept for signature stability
  * @param {string} alt alternative text (falls back to the slide title)
  * @param {string} poster optional poster image for videos
  * @param {boolean} eager whether this is the first slide (LCP candidate)
  */
-function buildMedia(desktopSrc, mobileSrc, alt, poster, eager) {
+function buildMedia(src, unused, alt, poster, eager) {
   const media = document.createElement('div');
   media.className = 'hero-slider-media';
+  if (!src) return media;
 
-  if (isVideo(desktopSrc)) {
+  if (isVideo(src)) {
     const video = document.createElement('video');
     video.className = 'hero-slider-video';
     video.muted = true;
@@ -44,39 +45,25 @@ function buildMedia(desktopSrc, mobileSrc, alt, poster, eager) {
     video.autoplay = true;
     video.playsInline = true;
     video.setAttribute('playsinline', '');
-    // First slide loads a frame immediately so it is never blank (no poster);
-    // later slides stay lazy until activated.
     video.preload = eager ? 'metadata' : 'none';
     video.setAttribute('aria-label', alt || '');
     if (poster) video.poster = poster;
 
-    // append a media fragment so a first frame renders even before playback
-    const frameHint = desktopSrc.includes('#') ? '' : '#t=0.1';
-    const deskSource = document.createElement('source');
-    deskSource.src = desktopSrc + frameHint;
-    deskSource.media = '(min-width: 769px)';
-    video.append(deskSource);
-
-    const mobSource = document.createElement('source');
-    mobSource.src = (mobileSrc || desktopSrc) + frameHint;
-    mobSource.media = '(max-width: 768px)';
-    video.append(mobSource);
+    // #t fragment renders a first frame even before playback
+    const source = document.createElement('source');
+    source.src = src.includes('#') ? src : `${src}#t=0.1`;
+    source.type = 'video/mp4';
+    video.append(source);
 
     media.append(video);
     return media;
   }
 
-  // image media: two <picture> elements toggled by CSS at the breakpoint
-  if (desktopSrc) {
-    const desk = createOptimizedPicture(desktopSrc, alt, eager, [{ width: '1600' }]);
-    desk.classList.add('hero-slider-desktop');
-    media.append(desk);
-  }
-  if (mobileSrc) {
-    const mob = createOptimizedPicture(mobileSrc, alt, eager, [{ width: '750' }]);
-    mob.classList.add('hero-slider-mobile');
-    media.append(mob);
-  }
+  const pic = createOptimizedPicture(src, alt, eager, [
+    { media: '(min-width: 769px)', width: '1600' },
+    { width: '750' },
+  ]);
+  media.append(pic);
   return media;
 }
 
@@ -114,14 +101,9 @@ function isMediaCell(cell) {
   return !!a && isAssetUrl(a.getAttribute('href'));
 }
 
-/** True when a non-media cell has any text. */
-function hasText(cell) {
-  return !!cell && !isMediaCell(cell) && !!cell.textContent.trim();
-}
-
 /**
  * The content cell holds the title/tagline/CTA — identified by a heading or a
- * (non-asset) link. A plain-text cell with neither is treated as the disclaimer.
+ * (non-asset) link.
  * @param {Element} cell
  */
 function isContentCell(cell) {
@@ -129,34 +111,39 @@ function isContentCell(cell) {
   return !!cell.querySelector('h1, h2, h3, h4, h5, h6') || !!cell.querySelector('a[href]');
 }
 
+const isDisclaimerText = (el) => /^\s*(disclaimer|#?t&?c|terms|\*)/i.test(el.textContent.trim());
+
 function buildSlide(row, index) {
   const cells = [...row.children];
 
-  // Detect cells by their content instead of relying on a rigid column order,
-  // so the block is resilient to how authors fill the table (empty cells, etc.).
-  // Content = cell with a heading or a link; disclaimer = a remaining text cell.
-  const contentCell = cells.find(isContentCell);
-  const mediaCells = cells.filter(isMediaCell);
-  const disclaimerCell = cells.find(
-    (c) => c !== contentCell && !isMediaCell(c) && hasText(c),
+  // Enum cells are resolved first (exact keyword match) so they are never
+  // mistaken for content or media.
+  const ctaCell = cells.find(
+    (c) => !isMediaCell(c) && /^(navy|white)$/i.test(c.textContent.trim()),
   );
+  const alignCell = cells.find(
+    (c) => c !== ctaCell && !isMediaCell(c) && /^(left|center|right)$/i.test(c.textContent.trim()),
+  );
+  const ctaStyle = ctaCell?.textContent.trim().toLowerCase() === 'white' ? 'white' : 'navy';
+  const disclaimerAlign = ['center', 'right'].includes(alignCell?.textContent.trim().toLowerCase())
+    ? alignCell.textContent.trim().toLowerCase() : 'left';
 
-  // Button colour: dark (navy) by default; an italicised CTA link makes it light.
-  const buttonStyle = contentCell?.querySelector('em a, a em, i a, a i') ? 'light' : 'dark';
+  // Content = a cell with a heading or link that isn't an enum cell.
+  const contentCell = cells.find((c) => c !== ctaCell && c !== alignCell && isContentCell(c));
+  const mediaCells = cells.filter(isMediaCell);
 
   const slide = document.createElement('li');
   slide.className = 'hero-slider-slide';
-  slide.dataset.button = buttonStyle;
+  slide.dataset.button = ctaStyle === 'white' ? 'light' : 'dark';
+  slide.dataset.disclaimerAlign = disclaimerAlign;
   slide.setAttribute('role', 'group');
   slide.setAttribute('aria-roledescription', 'Slide');
   moveInstrumentation(row, slide);
 
-  // first media cell = desktop, second (if any) = mobile
-  const desktopCell = mediaCells[0];
-  const mobileCell = mediaCells[1];
-  const desktopSrc = mediaSrc(desktopCell);
-  const mobileSrc = mediaSrc(mobileCell);
-  const poster = desktopCell?.querySelector('img')?.getAttribute('src');
+  // single media field serves desktop and mobile
+  const mediaCell = mediaCells[0];
+  const src = mediaSrc(mediaCell);
+  const poster = mediaCell?.querySelector('img')?.getAttribute('src');
 
   // content (title / tagline / CTA)
   const content = document.createElement('div');
@@ -173,13 +160,7 @@ function buildSlide(row, index) {
   const title = inner.querySelector('h1, h2, h3, h4, h5, h6');
   const altText = title ? title.textContent.trim() : `Slide ${index + 1}`;
 
-  // style the CTA link(s) as buttons — but never a paragraph that is really
-  // fine print (see disclaimer detection below)
-  const isDisclaimerText = (el) => /^\s*(disclaimer|#?t&?c|terms|\*)/i.test(el.textContent.trim());
-
-  // Fallback: if disclaimer text was typed into Content instead of the
-  // Disclaimer field, detect those paragraphs and render them as fine print
-  // so they never show at tagline size.
+  // disclaimer/fine-print paragraphs (typed in Content) render small + aligned
   inner.querySelectorAll('p').forEach((p) => {
     if (!p.querySelector('a') && isDisclaimerText(p)) {
       p.classList.add('hero-slider-disclaimer');
@@ -188,16 +169,7 @@ function buildSlide(row, index) {
 
   inner.querySelectorAll('a').forEach((a) => a.classList.add('button'));
 
-  const media = buildMedia(desktopSrc, mobileSrc, altText, poster, index === 0);
-
-  // preferred: dedicated Disclaimer field — flows below the CTA (matches source)
-  const disclaimerText = disclaimerCell?.textContent.trim();
-  if (disclaimerText) {
-    const disc = document.createElement('p');
-    disc.className = 'hero-slider-disclaimer';
-    disc.innerHTML = disclaimerCell.innerHTML;
-    inner.append(disc);
-  }
+  const media = buildMedia(src, '', altText, poster, index === 0);
 
   slide.append(media, content);
 

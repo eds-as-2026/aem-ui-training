@@ -240,16 +240,8 @@
         "component": "reference",
         "valueType": "string",
         "name": "image",
-        "label": "Desktop media",
-        "description": "Desktop background image shown at 769px and above. For a background video, put a link to an .mp4 in the Content field's first line instead of using an image.",
-        "multi": false
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "mobileImage",
-        "label": "Mobile media",
-        "description": "Optional mobile background image shown below 769px. Falls back to the desktop media when empty.",
+        "label": "Media",
+        "description": "Background image for the slide (used on desktop and mobile). For a background video, put a link to an .mp4 in the Content field instead of using an image.",
         "multi": false
       },
       {
@@ -258,15 +250,47 @@
         "name": "text",
         "value": "",
         "label": "Content",
-        "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. The button is dark (navy) by default; italicise the CTA link to make it the light (white) button. Alt text for images is taken from the title automatically."
+        "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. Add disclaimer / fine-print text here too (start it with 'Disclaimer' or '#T&C') — it renders small automatically."
       },
       {
-        "component": "richtext",
+        "component": "select",
         "valueType": "string",
-        "name": "disclaimer",
-        "value": "",
-        "label": "Disclaimer / Fine print",
-        "description": "Small legal fine print shown below the button (10px). Put disclaimer text HERE — not in Content — so it renders small instead of large."
+        "name": "ctaStyle",
+        "label": "CTA button style",
+        "value": "navy",
+        "description": "Button colour: Navy = dark fill with white text; White = white fill with black text.",
+        "options": [
+          {
+            "name": "Navy (dark fill, white text)",
+            "value": "navy"
+          },
+          {
+            "name": "White (white fill, black text)",
+            "value": "white"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "disclaimerAlign",
+        "label": "Disclaimer alignment",
+        "value": "left",
+        "description": "Horizontal alignment of the disclaimer / fine-print text.",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          }
+        ]
       }
     ]
   },

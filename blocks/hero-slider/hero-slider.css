@@ -171,7 +171,7 @@
   color: #fff;
 }
 
-/* disclaimer — flows within content below the CTA (matches source: 10px, centred) */
+/* disclaimer — flows within content below the CTA (matches source: 10px, left) */
 .hero-slider-disclaimer.hero-slider-disclaimer {
   margin: 16px 0 0;
   color: var(--hero-slider-text-color);
@@ -179,7 +179,7 @@
   font-size: 10px;
   line-height: 15px;
   font-weight: 400;
-  text-align: center;
+  text-align: left;
 }
 
 /* arrows (measured: 80x80 translucent circles, vertically centred) --------- */
@@ -209,26 +209,25 @@
   pointer-events: none;
 }
 
-/* chevron glyph — thin SVG chevron in white, matching the source's icon font
-   (prev \E003 / next \E002 rendered at 1.25rem). Uses mask so colour is white. */
+/* full arrow glyph (shaft + arrowhead) in white, matching the source arrows. */
 .hero-slider-arrow::before {
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 20px;
-  height: 30px;
+  width: 30px;
+  height: 20px;
   transform: translate(-50%, -50%);
   background-color: #fff;
   mask: center / contain no-repeat;
 }
 
 .hero-slider-prev::before {
-  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 30"><path fill="none" stroke="black" stroke-width="2" d="M14 4 L6 15 L14 26"/></svg>');
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" stroke-linecap="square" d="M21 12 H4 M11 5 L4 12 L11 19"/></svg>');
 }
 
 .hero-slider-next::before {
-  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 30"><path fill="none" stroke="black" stroke-width="2" d="M6 4 L14 15 L6 26"/></svg>');
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" stroke-linecap="square" d="M3 12 H20 M13 5 L20 12 L13 19"/></svg>');
 }
 
 .hero-slider-prev { left: 40px; }

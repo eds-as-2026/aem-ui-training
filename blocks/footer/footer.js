@@ -14,6 +14,9 @@ const SOCIAL_ICONS = {
 // The Kia wordmark logo, inline SVG (from kia.com — viewBox 0 0 68 34).
 const KIA_LOGO = '<svg data-name="Kia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 34" width="68" height="34" aria-hidden="true"><path fill="currentColor" d="M39.4,23.11c0,0.12,0.04,0.2,0.11,0.2c0.05,0,0.1-0.02,0.16-0.06L60.65,9.62c0.37-0.24,0.71-0.37,1.21-0.37h4.61c0.71,0,1.18,0.47,1.18,1.18v8.8c0,1.06-0.24,1.68-1.18,2.25l-5.59,3.36c-0.07,0.05-0.13,0.07-0.19,0.07c-0.07,0-0.13-0.05-0.13-0.24l0-10.28c0-0.11-0.04-0.2-0.11-0.2c-0.05,0-0.1,0.02-0.16,0.06l-15.34,9.96c-0.43,0.28-0.78,0.36-1.18,0.36H33.61c-0.71,0-1.18-0.47-1.18-1.18V10.71c0-0.09-0.04-0.18-0.11-0.18c-0.05,0-0.1,0.02-0.16,0.06l-10.11,6.08c-0.1,0.06-0.13,0.11-0.13,0.16c0,0.04,0.02,0.08,0.09,0.16l7.22,7.22c0.1,0.1,0.16,0.17,0.16,0.25c0,0.09-0.11,0.12-0.23,0.12l-6.54,0c-0.51,0-0.91-0.08-1.18-0.35l-4.38-4.38c-0.04-0.04-0.08-0.07-0.13-0.07c-0.04,0-0.09,0.02-0.14,0.05l-7.33,4.4c-0.44,0.27-0.75,0.35-1.18,0.35H1.53c-0.71,0-1.18-0.47-1.18-1.18v-8.64c0-1.06,0.24-1.67,1.18-2.24l5.63-3.38C7.21,9.1,7.26,9.09,7.31,9.09c0.09,0,0.13,0.09,0.13,0.28v11.55c0,0.12,0.03,0.18,0.11,0.18c0.05,0,0.1-0.03,0.17-0.07L26.73,9.61c0.45-0.27,0.73-0.35,1.25-0.35h10.23c0.71,0,1.18,0.47,1.18,1.18V23.11z"/></svg>';
 
+// Home breadcrumb icon (matches Kia's footer breadcrumb).
+const HOME_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3.2 3 10.5V21h6v-6h6v6h6V10.5L12 3.2zm0 2.57 5 4.06V19h-2v-6H9v6H7v-9.17l5-4.06z"/></svg>';
+
 function iconFor(name) {
   const key = name.trim().toLowerCase();
   if (key.includes('facebook')) return SOCIAL_ICONS.facebook;
@@ -96,6 +99,19 @@ export default async function decorate(block) {
         a.classList.add('footer-social-link');
       }
     });
+  }
+
+  // bottom legal: swap the "Home" breadcrumb link's text for a home icon
+  const legal = footer.querySelector('.footer-legal');
+  if (legal) {
+    const homeLink = [...legal.querySelectorAll('a')]
+      .find((a) => a.textContent.trim().toLowerCase() === 'home');
+    if (homeLink) {
+      const label = homeLink.textContent.trim();
+      homeLink.setAttribute('aria-label', label);
+      homeLink.innerHTML = `${HOME_ICON}<span class="footer-visually-hidden">${label}</span>`;
+      homeLink.classList.add('footer-home-link');
+    }
   }
 
   // Lay out the columns exactly like Kia: a 6-column row where the FIRST column

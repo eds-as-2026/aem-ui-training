@@ -194,6 +194,22 @@ footer .footer .footer-legal p {
   margin: 0 0 6px;
 }
 
+footer .footer .footer-home-link {
+  display: inline-block;
+  color: rgb(255 255 255 / 80%);
+}
+
+footer .footer .footer-home-link svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: currentcolor;
+}
+
+footer .footer .footer-home-link:hover {
+  color: rgb(255 255 255);
+}
+
 footer .footer .footer-legal a {
   color: rgb(255 255 255 / 80%);
 }

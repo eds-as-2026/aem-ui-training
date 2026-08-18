@@ -64,8 +64,8 @@
           "valueType": "string",
           "name": "disclaimer",
           "value": "",
-          "label": "Disclaimer",
-          "description": "Optional fine print shown at the bottom of the slide. Supports multiple lines / rich text."
+          "label": "Disclaimer / Fine print",
+          "description": "Small legal fine print shown below the button (10px). Put disclaimer text HERE — not in Content — so it renders small instead of large."
         }
       ]
     }

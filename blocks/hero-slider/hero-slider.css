@@ -222,16 +222,20 @@
   mask: center / contain no-repeat;
 }
 
+/* shift each glyph into the visible (inner) half of the edge-hugging circle */
 .hero-slider-prev::before {
+  transform: translate(-25%, -50%);
   mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" stroke-linecap="square" d="M21 12 H4 M11 5 L4 12 L11 19"/></svg>');
 }
 
 .hero-slider-next::before {
+  transform: translate(-75%, -50%);
   mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" stroke-linecap="square" d="M3 12 H20 M13 5 L20 12 L13 19"/></svg>');
 }
 
-.hero-slider-prev { left: 40px; }
-.hero-slider-next { right: 40px; }
+/* circles sit half-off the screen edges (matches source: left/right -40px) */
+.hero-slider-prev { left: -40px; }
+.hero-slider-next { right: -40px; }
 
 /* visually-hidden live region */
 .hero-slider-live {

@@ -1,7 +1,6 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
-const AUTOPLAY_DELAY = 6000;
 const VIDEO_EXT = /\.(mp4|webm|ogg|mov)(\?.*)?$/i;
 const IMAGE_EXT = /\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/i;
 
@@ -115,14 +114,19 @@ function isMediaCell(cell) {
   return !!a && isAssetUrl(a.getAttribute('href'));
 }
 
+/** True when a non-media cell has any text. */
+function hasText(cell) {
+  return !!cell && !isMediaCell(cell) && !!cell.textContent.trim();
+}
+
 /**
- * True when a cell holds authored copy (heading or text) and is not media.
+ * The content cell holds the title/tagline/CTA — identified by a heading or a
+ * (non-asset) link. A plain-text cell with neither is treated as the disclaimer.
  * @param {Element} cell
  */
 function isContentCell(cell) {
   if (!cell || isMediaCell(cell)) return false;
-  return !!cell.querySelector('h1, h2, h3, h4, h5, h6, p, ul, ol')
-    || !!cell.textContent.trim();
+  return !!cell.querySelector('h1, h2, h3, h4, h5, h6') || !!cell.querySelector('a[href]');
 }
 
 function buildSlide(row, index) {
@@ -130,12 +134,11 @@ function buildSlide(row, index) {
 
   // Detect cells by their content instead of relying on a rigid column order,
   // so the block is resilient to how authors fill the table (empty cells, etc.).
-  // Content is resolved first so a CTA link inside it is never mistaken for media.
+  // Content = cell with a heading or a link; disclaimer = a remaining text cell.
   const contentCell = cells.find(isContentCell);
   const mediaCells = cells.filter(isMediaCell);
-  // remaining non-media, non-content text cell is the disclaimer
   const disclaimerCell = cells.find(
-    (c) => c !== contentCell && !isMediaCell(c) && !isContentCell(c) && c.textContent.trim(),
+    (c) => c !== contentCell && !isMediaCell(c) && hasText(c),
   );
 
   // Button colour: dark (navy) by default; an italicised CTA link makes it light.
@@ -175,25 +178,25 @@ function buildSlide(row, index) {
 
   const media = buildMedia(desktopSrc, mobileSrc, altText, poster, index === 0);
 
-  slide.append(media, content);
-
-  // optional disclaimer
+  // optional disclaimer — flows within the content, below the CTA (matches source)
   const disclaimerText = disclaimerCell?.textContent.trim();
   if (disclaimerText) {
     const disc = document.createElement('p');
     disc.className = 'hero-slider-disclaimer';
     disc.innerHTML = disclaimerCell.innerHTML;
-    slide.append(disc);
+    inner.append(disc);
   }
+
+  slide.append(media, content);
 
   return slide;
 }
 
 /**
- * Builds prev/next arrows, pagination bullets, and the pause/play toggle.
- * @param {number} total number of slides
+ * Builds the prev/next arrows. The source carousel has no pagination bullets
+ * or pause/play control, so we only build arrows.
  */
-function buildControls(total) {
+function buildControls() {
   const prev = document.createElement('button');
   prev.type = 'button';
   prev.className = 'hero-slider-arrow hero-slider-prev';
@@ -204,30 +207,7 @@ function buildControls(total) {
   next.className = 'hero-slider-arrow hero-slider-next';
   next.setAttribute('aria-label', 'Next slide');
 
-  const pagination = document.createElement('div');
-  pagination.className = 'hero-slider-pagination';
-  pagination.setAttribute('role', 'tablist');
-  pagination.setAttribute('aria-label', 'Choose slide to display');
-  const bullets = [];
-  for (let i = 0; i < total; i += 1) {
-    const bullet = document.createElement('button');
-    bullet.type = 'button';
-    bullet.className = 'hero-slider-bullet';
-    bullet.setAttribute('role', 'tab');
-    bullet.setAttribute('aria-label', `Go to slide ${i + 1}`);
-    bullets.push(bullet);
-    pagination.append(bullet);
-  }
-
-  const pause = document.createElement('button');
-  pause.type = 'button';
-  pause.className = 'hero-slider-pause';
-  pause.setAttribute('aria-label', 'Pause slideshow');
-  pause.innerHTML = '<span class="hero-slider-pause-label">Pause</span>';
-
-  return {
-    prev, next, pagination, bullets, pause,
-  };
+  return { prev, next };
 }
 
 export default function decorate(block) {
@@ -242,9 +222,7 @@ export default function decorate(block) {
   viewport.className = 'hero-slider-viewport';
   viewport.append(list);
 
-  const {
-    prev, next, pagination, bullets, pause,
-  } = buildControls(slides.length);
+  const { prev, next } = buildControls();
 
   const liveRegion = document.createElement('div');
   liveRegion.className = 'hero-slider-live';
@@ -254,33 +232,23 @@ export default function decorate(block) {
   block.setAttribute('role', 'region');
   block.setAttribute('aria-roledescription', 'carousel');
   block.setAttribute('aria-label', 'Featured vehicles');
-  block.replaceChildren(viewport, prev, next, pagination, pause, liveRegion);
+  block.replaceChildren(viewport, prev, next, liveRegion);
 
-  // no-JS / single slide: show first slide statically, hide controls
+  // no-JS / single slide: show first slide statically, hide arrows
   if (slides.length < 2) {
-    [prev, next, pagination, pause].forEach((el) => { el.hidden = true; });
+    [prev, next].forEach((el) => { el.hidden = true; });
     slides[0]?.classList.add('is-active');
     slides[0]?.removeAttribute('aria-hidden');
     return;
   }
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let current = 0;
-  // The source carousel does not auto-advance; it only moves on user action.
-  // Start paused so slides never change on their own.
-  let playing = false;
-  let timer;
-
-  function announce(i) {
-    liveRegion.textContent = `Slide ${i + 1} of ${slides.length}`;
-  }
 
   function playActiveVideo() {
     slides.forEach((slide, i) => {
       const video = slide.querySelector('video');
       if (!video) return;
       if (i === current) {
-        // ensure sources load only when this slide becomes active
         if (video.preload === 'none') { video.preload = 'auto'; video.load(); }
         const p = video.play();
         if (p && typeof p.catch === 'function') p.catch(() => {});
@@ -291,7 +259,7 @@ export default function decorate(block) {
   }
 
   function show(index) {
-    current = (index + slides.length) % slides.length;
+    current = Math.max(0, Math.min(index, slides.length - 1));
     // slide the track horizontally to the active slide
     list.style.transform = `translateX(-${current * 100}%)`;
     slides.forEach((slide, i) => {
@@ -300,73 +268,26 @@ export default function decorate(block) {
       slide.setAttribute('aria-hidden', String(!active));
       slide.inert = !active;
     });
-    bullets.forEach((b, i) => {
-      const active = i === current;
-      b.classList.toggle('is-active', active);
-      b.setAttribute('aria-selected', String(active));
-      b.tabIndex = active ? 0 : -1;
-    });
     // non-looping arrows: hide prev on the first slide, next on the last
     prev.disabled = current === 0;
     next.disabled = current === slides.length - 1;
-    announce(current);
+    liveRegion.textContent = `Slide ${current + 1} of ${slides.length}`;
     playActiveVideo();
   }
 
-  function stop() {
-    clearInterval(timer);
-    timer = undefined;
-  }
+  prev.addEventListener('click', () => show(current - 1));
+  next.addEventListener('click', () => show(current + 1));
 
-  function start() {
-    stop();
-    if (reduceMotion) return;
-    timer = setInterval(() => show(current + 1), AUTOPLAY_DELAY);
-  }
-
-  function setPlaying(nextPlaying) {
-    playing = nextPlaying;
-    pause.classList.toggle('is-paused', !playing);
-    pause.setAttribute('aria-label', playing ? 'Pause slideshow' : 'Play slideshow');
-    pause.querySelector('.hero-slider-pause-label').textContent = playing ? 'Pause' : 'Play';
-    if (playing) start(); else stop();
-  }
-
-  prev.addEventListener('click', () => { show(current - 1); if (playing) start(); });
-  next.addEventListener('click', () => { show(current + 1); if (playing) start(); });
-  bullets.forEach((b, i) => b.addEventListener('click', () => { show(i); if (playing) start(); }));
-  pause.addEventListener('click', () => setPlaying(!playing));
-
-  // keyboard: arrow keys move between slides when a bullet is focused
-  pagination.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); show(current + 1); bullets[current].focus(); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); show(current - 1); bullets[current].focus(); }
-  });
-
-  // pause on hover / focus, resume on leave / blur
-  block.addEventListener('pointerenter', () => { if (playing) stop(); });
-  block.addEventListener('pointerleave', () => { if (playing) start(); });
-  block.addEventListener('focusin', () => { if (playing) stop(); });
-  block.addEventListener('focusout', (e) => {
-    if (playing && !block.contains(e.relatedTarget)) start();
-  });
-
-  // pause autoplay + videos when the carousel scrolls off-screen
+  // pause offscreen videos to save resources
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (playing) start();
-          playActiveVideo();
-        } else {
-          stop();
-          slides.forEach((s) => s.querySelector('video')?.pause());
-        }
+        if (entry.isIntersecting) playActiveVideo();
+        else slides.forEach((s) => s.querySelector('video')?.pause());
       });
     }, { threshold: 0.25 });
     io.observe(block);
   }
 
   show(0);
-  setPlaying(playing);
 }

@@ -1,20 +1,248 @@
-footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+/* Kia India footer — desktop appearance (measured from kia.com/in) */
+
+footer .footer {
+  background-color: rgb(5 20 31);
+  color: rgb(255 255 255);
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  font-family: kia-signature, roboto, 'Helvetica Neue', helvetica, arial, sans-serif;
+  padding: 80px 0 65px;
 }
 
 footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+  margin: 0 80px;
 }
 
 footer .footer p {
   margin: 0;
 }
 
-@media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+footer .footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Visually-hidden helper for social-icon accessible labels */
+footer .footer .footer-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Logo ── */
+footer .footer .footer-logo {
+  margin-bottom: 40px;
+}
+
+footer .footer .footer-logo-link {
+  display: inline-block;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgb(255 255 255);
+}
+
+/* ── Column grid ── */
+footer .footer .footer-columns {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 80px 55px;
+  padding-bottom: 55px;
+}
+
+footer .footer .footer-columns > div {
+  flex: 0 0 auto;
+  width: 219px;
+  margin-top: -15px;
+}
+
+/* Reset the outer inset now that columns carry it */
+footer .footer .footer-quicklinks,
+footer .footer .footer-social,
+footer .footer .footer-column {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Headings (column titles + quick links / social labels) */
+footer .footer .footer-columns h4,
+footer .footer .footer-columns > div > p:first-child {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  color: rgb(255 255 255);
+  margin: 0 0 8px;
+}
+
+footer .footer .footer-columns h4 a {
+  color: rgb(255 255 255);
+}
+
+footer .footer .footer-columns ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer .footer .footer-columns li {
+  line-height: 24px;
+}
+
+footer .footer .footer-columns li a {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: rgb(255 255 255 / 60%);
+  padding: 0.5em 0;
+  background-image: linear-gradient(transparent calc(100% - 1px), rgb(187 22 43) 1px);
+  background-repeat: no-repeat;
+  background-size: 0 100%;
+  transition: color 0.2s ease-out, background-size 0.3s;
+}
+
+footer .footer .footer-columns li a:hover,
+footer .footer .footer-columns li a:focus {
+  color: rgb(255 255 255);
+  background-size: 100% 100%;
+}
+
+/* ── Social icons ── */
+footer .footer .footer-social ul {
+  display: flex;
+  gap: 4px;
+  margin-left: -8px;
+}
+
+footer .footer .footer-social-link {
+  display: block;
+  padding: 0.6em 0.7em;
+  color: rgb(255 255 255);
+  background-image: none;
+}
+
+footer .footer .footer-social-link svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+footer .footer .footer-social-link:hover {
+  opacity: 0.7;
+}
+
+/* ── Bottom legal band ── */
+/* stylelint-disable no-descending-specificity */
+footer .footer .footer-legal {
+  margin: 0 80px;
+  padding-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  font-size: 14px;
+  line-height: 22px;
+  color: rgb(255 255 255 / 60%);
+}
+
+footer .footer .footer-legal p {
+  margin: 0 0 6px;
+}
+
+footer .footer .footer-legal a {
+  color: rgb(255 255 255 / 80%);
+}
+
+footer .footer .footer-legal a:hover {
+  color: rgb(255 255 255);
+  text-decoration: underline;
+}
+
+/* stylelint-enable no-descending-specificity */
+
+/* ── Mobile (< 900px): single-column stack + accordion columns ── */
+@media (width < 900px) {
+  footer .footer {
+    padding: 50px 0;
+  }
+
+  footer .footer > div,
+  footer .footer .footer-columns,
+  footer .footer .footer-legal {
+    margin: 0 31px;
+  }
+
+  footer .footer .footer-logo {
+    margin-bottom: 28px;
+  }
+
+  /* stack every column vertically */
+  footer .footer .footer-columns {
+    display: block;
+    padding-bottom: 24px;
+  }
+
+  footer .footer .footer-columns > div {
+    width: auto;
+    margin-top: 0;
+  }
+
+  /* Quick Links + Social stay open; heading columns become accordions */
+  footer .footer .footer-column {
+    border-top: 1px solid rgb(255 255 255 / 20%);
+  }
+
+  footer .footer .footer-column:last-of-type {
+    border-bottom: 1px solid rgb(255 255 255 / 20%);
+  }
+
+  footer .footer .footer-column h4 {
+    position: relative;
+    margin: 0;
+    padding: 14px 0;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  /* chevron indicator on the right of each accordion heading */
+  footer .footer .footer-column h4::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    width: 9px;
+    height: 9px;
+    border-right: 2px solid rgb(255 255 255 / 70%);
+    border-bottom: 2px solid rgb(255 255 255 / 70%);
+    transform: translateY(-70%) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+
+  footer .footer .footer-column.is-open h4::after {
+    transform: translateY(-30%) rotate(225deg);
+  }
+
+  /* collapse the link list by default, expand when open */
+  footer .footer .footer-column ul {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  footer .footer .footer-column.is-open ul {
+    max-height: 720px;
+    padding-bottom: 12px;
+  }
+
+  /* keep the heading link from stealing the tap on mobile */
+  footer .footer .footer-column h4 a {
+    pointer-events: none;
+  }
+
+  /* Social icon row a touch larger for tapping */
+  footer .footer .footer-social {
+    margin-top: 20px;
   }
 }

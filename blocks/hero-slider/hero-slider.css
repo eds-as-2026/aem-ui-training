@@ -39,6 +39,10 @@
   overflow: hidden;
   color: var(--hero-slider-text-color);
   font-family: var(--hero-slider-font);
+
+  /* enable container queries so sizing tracks the block's own width — correct
+     in the Universal Editor's narrow iframe as well as on the live page */
+  container-type: inline-size;
 }
 
 .hero-slider-container .hero-slider-wrapper {
@@ -226,18 +230,18 @@
 
 /* shift each glyph into the visible (inner) half of the edge-hugging circle */
 .hero-slider-prev::before {
-  transform: translate(-25%, -50%);
+  transform: translate(-50%, -50%);
   mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" stroke-linecap="square" d="M21 12 H4 M11 5 L4 12 L11 19"/></svg>');
 }
 
 .hero-slider-next::before {
-  transform: translate(-75%, -50%);
+  transform: translate(-50%, -50%);
   mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2" stroke-linecap="square" d="M3 12 H20 M13 5 L20 12 L13 19"/></svg>');
 }
 
-/* circles sit half-off the screen edges (matches source: left/right -40px) */
-.hero-slider-prev { left: -40px; }
-.hero-slider-next { right: -40px; }
+/* arrows fully inset from the edges (visible in every context incl. editor) */
+.hero-slider-prev { left: 24px; }
+.hero-slider-next { right: 24px; }
 
 /* visually-hidden live region */
 .hero-slider-live {
@@ -252,7 +256,27 @@
   white-space: nowrap;
 }
 
-/* desktop breakpoint (single, 769px) -------------------------------------- */
+/* desktop styling — applied when the BLOCK is >=769px wide (container query),
+   so it holds inside the editor iframe, with a viewport-width @media fallback
+   for browsers without container-query support. */
+@container (width >= 769px) {
+  .hero-slider {
+    --hero-slider-aspect: 1440 / 945;
+    --hero-slider-gutter: 80px;
+    --hero-slider-content-offset: 94px;
+    --hero-slider-title-size: 40px;
+    --hero-slider-title-line: 60px;
+    --hero-slider-tagline-size: 28px;
+    --hero-slider-tagline-line: 42px;
+    --hero-slider-cta-margin: 40px;
+  }
+
+  .hero-slider-desktop { display: block; }
+  .hero-slider-mobile { display: none; }
+
+  .hero-slider-arrow { display: block; }
+}
+
 @media (width >= 769px) {
   .hero-slider {
     --hero-slider-aspect: 1440 / 945;

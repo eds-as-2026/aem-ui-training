@@ -191,36 +191,47 @@ footer .footer .footer-legal {
   text-align: left;
 }
 
-/* Bottom band = a row: Home icon on the left, contact/copyright on the right
-   (matching Kia). Neutralise the default EDS content wrapper first. */
+/* Bottom band (matches Kia): Home icon pinned left, the contact/copyright
+   block centred across the row. Neutralise the default EDS content wrapper. */
 footer .footer .footer-legal > div {
+  position: relative;
   max-width: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
+  display: block;
 }
 
 footer .footer .footer-legal p {
   margin: 0 0 6px;
-  text-align: left;
 }
 
+/* Home icon absolutely pinned to the left edge of the band */
 footer .footer .footer-legal-home {
-  flex: 0 0 auto;
+  position: absolute;
+  left: 0;
+  top: 0;
   margin: 0;
 }
 
-/* right-hand contact block */
+/* centred contact block */
 footer .footer .footer-legal-contact {
-  flex: 1 1 auto;
-  text-align: right;
+  text-align: center;
 }
 
 footer .footer .footer-legal-contact p {
   margin: 0 0 6px;
+}
+
+/* assistance line + copyright share one centred row */
+footer .footer .footer-legal-row {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+footer .footer .footer-legal-row p {
+  margin: 0;
 }
 
 footer .footer .footer-home-link {

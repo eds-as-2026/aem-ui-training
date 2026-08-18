@@ -122,10 +122,20 @@ export default async function decorate(block) {
       homePara.classList.add('footer-legal-home');
     }
 
-    // group everything that isn't the Home breadcrumb into a right-hand block
+    // group everything that isn't the Home breadcrumb into a centred contact
+    // block; the assistance line + copyright share one row (as on Kia), with
+    // the EV assistance line below.
+    const rest = paras.filter((p) => p !== homePara);
     const contact = document.createElement('div');
     contact.className = 'footer-legal-contact';
-    paras.filter((p) => p !== homePara).forEach((p) => contact.append(p));
+
+    const evPara = rest.find((p) => /ev assistance/i.test(p.textContent));
+    const topRow = document.createElement('div');
+    topRow.className = 'footer-legal-row';
+    rest.filter((p) => p !== evPara).forEach((p) => topRow.append(p));
+    contact.append(topRow);
+    if (evPara) contact.append(evPara);
+
     wrapper.append(contact);
   }
 

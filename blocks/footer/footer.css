@@ -47,18 +47,24 @@ footer .footer .footer-logo-link {
   color: rgb(255 255 255);
 }
 
-/* ── Column grid ── */
+/* ── Column grid (6 columns, single row like Kia) ── */
 footer .footer .footer-columns {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0 24px;
   margin: 0 80px 55px;
   padding-bottom: 55px;
 }
 
 footer .footer .footer-columns > div {
-  flex: 0 0 auto;
-  width: 219px;
-  margin-top: -15px;
+  min-width: 0;
+}
+
+/* first column stacks Quick Links above Social */
+footer .footer .footer-col-primary {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 /* Reset the outer inset now that columns carry it */

@@ -88,14 +88,27 @@ export default async function decorate(block) {
     });
   }
 
-  // group the link columns (quick links + social + heading columns) into one
-  // row so they sit side-by-side like the source
-  const columns = footer.querySelectorAll('.footer-quicklinks, .footer-social, .footer-column');
-  if (columns.length) {
+  // Lay out the columns exactly like Kia: a 6-column row where the FIRST column
+  // stacks Quick Links + Social vertically, followed by the five heading
+  // columns (Cars, Buy, Owners, Discover Kia, Legal).
+  const quicklinks = footer.querySelector('.footer-quicklinks');
+  const socialCol = footer.querySelector('.footer-social');
+  const headingCols = [...footer.querySelectorAll('.footer-column')];
+
+  if (quicklinks || headingCols.length) {
     const grid = document.createElement('div');
     grid.className = 'footer-columns';
-    columns[0].before(grid);
-    columns.forEach((c) => grid.append(c));
+    (quicklinks || socialCol || headingCols[0]).before(grid);
+
+    // first column: Quick Links stacked above Social
+    const primary = document.createElement('div');
+    primary.className = 'footer-col-primary';
+    if (quicklinks) primary.append(quicklinks);
+    if (socialCol) primary.append(socialCol);
+    grid.append(primary);
+
+    // remaining columns: the heading/accordion columns
+    headingCols.forEach((c) => grid.append(c));
   }
 
   // On mobile the heading columns collapse into accordions (matches source).

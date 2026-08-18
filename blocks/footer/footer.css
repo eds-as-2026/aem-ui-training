@@ -59,10 +59,14 @@ footer .footer .footer-logo {
 
 footer .footer .footer-logo-link {
   display: inline-block;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
   color: rgb(255 255 255);
+}
+
+footer .footer .footer-logo-link svg {
+  display: block;
+  width: 68px;
+  height: 34px;
+  fill: currentcolor;
 }
 
 /* ── Column grid (6 columns, single row like Kia) ── */
@@ -95,7 +99,8 @@ footer .footer .footer-column {
 
 /* Headings (column titles + quick links / social labels) */
 footer .footer .footer-columns h4,
-footer .footer .footer-columns > div > p:first-child {
+footer .footer .footer-quicklinks p:first-child,
+footer .footer .footer-social p:first-child {
   font-family: kia-signature, roboto, 'Helvetica Neue', helvetica, arial, sans-serif;
   font-size: 16px;
   line-height: 24px;

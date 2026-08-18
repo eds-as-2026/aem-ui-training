@@ -11,6 +11,9 @@ const SOCIAL_ICONS = {
   pinterest: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.64 7.86 6.36 9.32-.09-.79-.17-2 .03-2.86.18-.78 1.17-4.97 1.17-4.97s-.3-.6-.3-1.48c0-1.39.8-2.42 1.8-2.42.85 0 1.26.64 1.26 1.4 0 .86-.54 2.14-.82 3.33-.24 1 .5 1.81 1.48 1.81 1.78 0 3.14-1.87 3.14-4.57 0-2.39-1.72-4.06-4.17-4.06-2.84 0-4.51 2.13-4.51 4.33 0 .86.33 1.78.74 2.28.08.1.1.19.07.29-.08.32-.26 1-.29 1.14-.05.19-.15.23-.35.14-1.3-.6-2.11-2.5-2.11-4.02 0-3.28 2.38-6.29 6.86-6.29 3.6 0 6.4 2.57 6.4 6 0 3.58-2.26 6.46-5.39 6.46-1.05 0-2.04-.55-2.38-1.2l-.65 2.47c-.23.9-.86 2.03-1.29 2.72.97.3 2 .46 3.07.46 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>',
 };
 
+// The Kia wordmark logo, inline SVG (from kia.com — viewBox 0 0 68 34).
+const KIA_LOGO = '<svg data-name="Kia" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 34" width="68" height="34" aria-hidden="true"><path fill="currentColor" d="M39.4,23.11c0,0.12,0.04,0.2,0.11,0.2c0.05,0,0.1-0.02,0.16-0.06L60.65,9.62c0.37-0.24,0.71-0.37,1.21-0.37h4.61c0.71,0,1.18,0.47,1.18,1.18v8.8c0,1.06-0.24,1.68-1.18,2.25l-5.59,3.36c-0.07,0.05-0.13,0.07-0.19,0.07c-0.07,0-0.13-0.05-0.13-0.24l0-10.28c0-0.11-0.04-0.2-0.11-0.2c-0.05,0-0.1,0.02-0.16,0.06l-15.34,9.96c-0.43,0.28-0.78,0.36-1.18,0.36H33.61c-0.71,0-1.18-0.47-1.18-1.18V10.71c0-0.09-0.04-0.18-0.11-0.18c-0.05,0-0.1,0.02-0.16,0.06l-10.11,6.08c-0.1,0.06-0.13,0.11-0.13,0.16c0,0.04,0.02,0.08,0.09,0.16l7.22,7.22c0.1,0.1,0.16,0.17,0.16,0.25c0,0.09-0.11,0.12-0.23,0.12l-6.54,0c-0.51,0-0.91-0.08-1.18-0.35l-4.38-4.38c-0.04-0.04-0.08-0.07-0.13-0.07c-0.04,0-0.09,0.02-0.14,0.05l-7.33,4.4c-0.44,0.27-0.75,0.35-1.18,0.35H1.53c-0.71,0-1.18-0.47-1.18-1.18v-8.64c0-1.06,0.24-1.67,1.18-2.24l5.63-3.38C7.21,9.1,7.26,9.09,7.31,9.09c0.09,0,0.13,0.09,0.13,0.28v11.55c0,0.12,0.03,0.18,0.11,0.18c0.05,0,0.1-0.03,0.17-0.07L26.73,9.61c0.45-0.27,0.73-0.35,1.25-0.35h10.23c0.71,0,1.18,0.47,1.18,1.18V23.11z"/></svg>';
+
 function iconFor(name) {
   const key = name.trim().toLowerCase();
   if (key.includes('facebook')) return SOCIAL_ICONS.facebook;
@@ -66,12 +69,19 @@ export default async function decorate(block) {
     }
   });
 
-  // logo: keep the anchor, drop the plain-text label paragraph
+  // logo: keep the anchor, drop the plain-text label paragraph, and swap the
+  // link text for the inline Kia wordmark SVG (keep an accessible label)
   const logo = footer.querySelector('.footer-logo');
   if (logo) {
     const link = logo.querySelector('a');
     logo.textContent = '';
-    if (link) { link.classList.add('footer-logo-link'); logo.append(link); }
+    if (link) {
+      const label = link.textContent.trim() || 'Kia Motors';
+      link.classList.add('footer-logo-link');
+      link.setAttribute('aria-label', label);
+      link.innerHTML = `${KIA_LOGO}<span class="footer-visually-hidden">${label}</span>`;
+      logo.append(link);
+    }
   }
 
   // social: replace each link's text with an inline SVG icon (keep a11y label)

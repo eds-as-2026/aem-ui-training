@@ -1,5 +1,23 @@
 /* Kia India footer — desktop appearance (measured from kia.com/in) */
 
+/* Self-host the Kia Signature font so the footer renders correctly on every
+   page, including those without a hero-slider block. */
+@font-face {
+  font-family: kia-signature;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/kia-signature-bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: kia-signature;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/kia-signature-regular.woff2') format('woff2');
+}
+
 footer .footer {
   background-color: rgb(5 20 31);
   color: rgb(255 255 255);
@@ -78,6 +96,7 @@ footer .footer .footer-column {
 /* Headings (column titles + quick links / social labels) */
 footer .footer .footer-columns h4,
 footer .footer .footer-columns > div > p:first-child {
+  font-family: kia-signature, roboto, 'Helvetica Neue', helvetica, arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 700;

@@ -230,19 +230,22 @@ footer .footer .footer-home-link:hover {
   color: rgb(255 255 255);
 }
 
-/* centred contact block */
+/* Contact block: a left-aligned group centred as a whole across the band
+   (Kia keeps the text left-aligned, not each line individually centred). */
 footer .footer .footer-legal-contact {
-  text-align: center;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: left;
 }
 
 footer .footer .footer-legal-contact p {
   margin: 0 0 4px;
 }
 
-/* assistance line + copyright share one centred row */
+/* assistance line + copyright share one row */
 footer .footer .footer-legal-row {
   display: flex;
-  justify-content: center;
   gap: 24px;
   flex-wrap: wrap;
 }

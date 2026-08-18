@@ -142,16 +142,16 @@
   font-weight: 400;
 }
 
-/* CTA button (measured: square corners). Light (white) is the base style;
-   dark (navy) is applied per slide via [data-button="dark"] below. */
+/* CTA button (square corners). Default (non-italic CTA) = black fill / white
+   text; italicised CTA link => white fill / black text (data-button="light"). */
 .hero-slider-content a.button {
   display: inline-block;
   margin-top: var(--hero-slider-cta-margin);
-  border: 1px solid #fff;
+  border: 1px solid #000;
   border-radius: 0;
   padding: 18px 40px 19px;
-  background-color: #fff;
-  color: #000;
+  background-color: #000;
+  color: #fff;
   font-family: var(--hero-slider-font);
   font-size: 14px;
   line-height: 21px;
@@ -164,11 +164,11 @@
   opacity: 0.9;
 }
 
-/* per-slide button style (author-controlled): dark = navy fill / white text */
-.hero-slider-slide[data-button="dark"] .hero-slider-content a.button {
-  border-color: #05141f;
-  background-color: #05141f;
-  color: #fff;
+/* italicised CTA link => white fill / black text */
+.hero-slider-slide[data-button="light"] .hero-slider-content a.button {
+  border-color: #fff;
+  background-color: #fff;
+  color: #000;
 }
 
 /* disclaimer — flows within content below the CTA (10px), right-aligned with

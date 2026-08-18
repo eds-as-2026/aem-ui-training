@@ -129,11 +129,16 @@ function buildSlide(row, index) {
   const ctaCell = cells.find(
     (c) => !isMediaCell(c) && /^(white|navy)$/i.test(c.textContent.trim()),
   );
-  const whiteCta = ctaCell?.textContent.trim().toLowerCase() === 'white';
 
   // Content = a cell with a heading or link that isn't the enum cell.
   const contentCell = cells.find((c) => c !== ctaCell && isContentCell(c));
   const mediaCells = cells.filter(isMediaCell);
+
+  // CTA colour: default (non-italic) = white text on black; an italicised CTA
+  // link flips it to black text on white. The dropdown, when set, wins.
+  const italicCta = !!contentCell?.querySelector('em a, a em, i a, a i');
+  let whiteCta = italicCta; // italic -> white bg (light)
+  if (ctaCell) whiteCta = ctaCell.textContent.trim().toLowerCase() === 'white';
 
   const slide = document.createElement('li');
   slide.className = 'hero-slider-slide';

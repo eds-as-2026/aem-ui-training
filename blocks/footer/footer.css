@@ -156,16 +156,17 @@ footer .footer .footer-columns li a:focus {
   background-size: 100% 100%;
 }
 
-/* ── Social icons ── */
+/* ── Social icons (icon spacing comes from asymmetric link padding, matching
+   Kia: 14px right / 6px left, no flex gap) ── */
 footer .footer .footer-social ul {
   display: flex;
-  gap: 4px;
-  margin-left: -8px;
+  gap: 0;
+  margin-left: -6px;
 }
 
 footer .footer .footer-social-link {
   display: block;
-  padding: 0.6em 0.7em;
+  padding: 12px 14px 12px 6px;
   color: rgb(255 255 255);
   background-image: none;
 }
@@ -231,12 +232,12 @@ footer .footer .footer-home-link:hover {
   color: rgb(255 255 255);
 }
 
-/* Contact block: a left-aligned group centred as a whole across the band
-   (Kia keeps the text left-aligned, not each line individually centred). */
+/* Contact block: left-aligned text, anchored ~46% across the band so it sits
+   centre-right like Kia (assistance line starts at ~L=667 on a 1440 layout). */
 footer .footer .footer-legal-contact {
   width: max-content;
   max-width: 100%;
-  margin: 0 auto;
+  margin-left: 46%;
   text-align: left;
 }
 

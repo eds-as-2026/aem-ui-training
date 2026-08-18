@@ -101,17 +101,32 @@ export default async function decorate(block) {
     });
   }
 
-  // bottom legal: swap the "Home" breadcrumb link's text for a home icon
+  // bottom legal: swap the "Home" breadcrumb link's text for a home icon,
+  // then group the remaining contact/copyright paragraphs so the band reads
+  // like Kia — Home icon on the left, contact info on the right.
   const legal = footer.querySelector('.footer-legal');
   if (legal) {
-    const homeLink = [...legal.querySelectorAll('a')]
-      .find((a) => a.textContent.trim().toLowerCase() === 'home');
-    if (homeLink) {
+    const wrapper = legal.querySelector('div') || legal;
+    const paras = [...wrapper.children].filter((el) => el.tagName === 'P');
+    const homePara = paras.find((p) => {
+      const a = p.querySelector('a');
+      return a && a.textContent.trim().toLowerCase() === 'home';
+    });
+
+    if (homePara) {
+      const homeLink = homePara.querySelector('a');
       const label = homeLink.textContent.trim();
       homeLink.setAttribute('aria-label', label);
       homeLink.innerHTML = `${HOME_ICON}<span class="footer-visually-hidden">${label}</span>`;
       homeLink.classList.add('footer-home-link');
+      homePara.classList.add('footer-legal-home');
     }
+
+    // group everything that isn't the Home breadcrumb into a right-hand block
+    const contact = document.createElement('div');
+    contact.className = 'footer-legal-contact';
+    paras.filter((p) => p !== homePara).forEach((p) => contact.append(p));
+    wrapper.append(contact);
   }
 
   // Lay out the columns exactly like Kia: a 6-column row where the FIRST column

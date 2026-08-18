@@ -191,18 +191,36 @@ footer .footer .footer-legal {
   text-align: left;
 }
 
-/* Neutralise the default EDS content wrapper so the band stays a simple,
-   left-aligned vertical stack (Home icon → assistance → copyright → EV line) */
+/* Bottom band = a row: Home icon on the left, contact/copyright on the right
+   (matching Kia). Neutralise the default EDS content wrapper first. */
 footer .footer .footer-legal > div {
   max-width: none;
   margin: 0;
   padding: 0;
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
 }
 
 footer .footer .footer-legal p {
   margin: 0 0 6px;
   text-align: left;
+}
+
+footer .footer .footer-legal-home {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+/* right-hand contact block */
+footer .footer .footer-legal-contact {
+  flex: 1 1 auto;
+  text-align: right;
+}
+
+footer .footer .footer-legal-contact p {
+  margin: 0 0 6px;
 }
 
 footer .footer .footer-home-link {

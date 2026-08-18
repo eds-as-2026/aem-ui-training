@@ -121,34 +121,23 @@ function isContentCell(cell) {
 
 const isDisclaimerText = (el) => /^\s*(disclaimer|#?t&?c|terms|\*)/i.test(el.textContent.trim());
 
-// Slides that use the white CTA on the Kia source (1-based positions 1 & 3).
-const WHITE_CTA_SLIDES = new Set([0, 2]);
-
 function buildSlide(row, index) {
   const cells = [...row.children];
 
-  // Disclaimer-alignment enum cell resolved first (exact keyword) so it is
-  // never mistaken for content or media.
-  const alignCell = cells.find(
-    (c) => !isMediaCell(c) && /^(left|center|right)$/i.test(c.textContent.trim()),
+  // CTA-background enum cell resolved first (exact keyword) so it is never
+  // mistaken for content or media.
+  const ctaCell = cells.find(
+    (c) => !isMediaCell(c) && /^(white|navy)$/i.test(c.textContent.trim()),
   );
-  const disclaimerAlign = ['center', 'right'].includes(alignCell?.textContent.trim().toLowerCase())
-    ? alignCell.textContent.trim().toLowerCase() : 'left';
+  const whiteCta = ctaCell?.textContent.trim().toLowerCase() === 'white';
 
   // Content = a cell with a heading or link that isn't the enum cell.
-  const contentCell = cells.find((c) => c !== alignCell && isContentCell(c));
+  const contentCell = cells.find((c) => c !== ctaCell && isContentCell(c));
   const mediaCells = cells.filter(isMediaCell);
-
-  // CTA colour auto-matches the Kia source by slide position; an italicised CTA
-  // link flips it as a per-slide override.
-  const italicOverride = !!contentCell?.querySelector('em a, a em, i a, a i');
-  let whiteCta = WHITE_CTA_SLIDES.has(index);
-  if (italicOverride) whiteCta = !whiteCta;
 
   const slide = document.createElement('li');
   slide.className = 'hero-slider-slide';
   slide.dataset.button = whiteCta ? 'light' : 'dark';
-  slide.dataset.disclaimerAlign = disclaimerAlign;
   slide.setAttribute('role', 'group');
   slide.setAttribute('aria-roledescription', 'Slide');
   moveInstrumentation(row, slide);

@@ -57,19 +57,18 @@
           "name": "text",
           "value": "",
           "label": "Content",
-          "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. CTA colour auto-matches Kia (slides 1 & 3 white, others navy); to override a slide, italicise the CTA link to flip it. Add disclaimer / fine-print text here too (start it with 'Disclaimer' or '#T&C') — it renders small automatically."
+          "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. Add disclaimer / fine-print text here too (start it with 'Disclaimer' or '#T&C') — it renders small and right-aligned automatically."
         },
         {
           "component": "select",
           "valueType": "string",
-          "name": "disclaimerAlign",
-          "label": "Disclaimer alignment",
-          "value": "left",
-          "description": "Horizontal alignment of the disclaimer / fine-print text.",
+          "name": "ctaStyle",
+          "label": "CTA button background",
+          "value": "navy",
+          "description": "Button colour: White = white fill with black text; Navy = dark fill with white text.",
           "options": [
-            { "name": "Left", "value": "left" },
-            { "name": "Center", "value": "center" },
-            { "name": "Right", "value": "right" }
+            { "name": "White (white fill, black text)", "value": "white" },
+            { "name": "Navy (dark fill, white text)", "value": "navy" }
           ]
         }
       ]

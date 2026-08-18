@@ -90,6 +90,10 @@
   object-fit: cover;
 }
 
+/* desktop / mobile image swap (single 769px breakpoint) */
+.hero-slider-desktop { display: none; }
+.hero-slider-mobile { display: block; }
+
 /* content ------------------------------------------------------------------ */
 .hero-slider-content {
   position: absolute;
@@ -267,6 +271,9 @@
     --hero-slider-tagline-line: 42px;
     --hero-slider-cta-margin: 40px;
   }
+
+  .hero-slider-desktop { display: block; }
+  .hero-slider-mobile { display: none; }
 
   .hero-slider-arrow { display: block; }
 }

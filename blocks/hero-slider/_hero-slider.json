@@ -39,8 +39,16 @@
           "component": "reference",
           "valueType": "string",
           "name": "image",
-          "label": "Media",
-          "description": "Background image for the slide (used on desktop and mobile). For a background video, put a link to an .mp4 in the Content field instead of using an image.",
+          "label": "Desktop media",
+          "description": "Desktop background image shown at 769px and above. For a background video, put a link to an .mp4 in the Content field instead of using an image.",
+          "multi": false
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "mobileImage",
+          "label": "Mobile media",
+          "description": "Optional mobile background image/video shown below 769px. Falls back to the desktop media when empty.",
           "multi": false
         },
         {
@@ -49,19 +57,7 @@
           "name": "text",
           "value": "",
           "label": "Content",
-          "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. Add disclaimer / fine-print text here too (start it with 'Disclaimer' or '#T&C') — it renders small automatically."
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "ctaStyle",
-          "label": "CTA button style",
-          "value": "navy",
-          "description": "Button colour: Navy = dark fill with white text; White = white fill with black text.",
-          "options": [
-            { "name": "Navy (dark fill, white text)", "value": "navy" },
-            { "name": "White (white fill, black text)", "value": "white" }
-          ]
+          "description": "Title (as a heading), a tagline paragraph, and a link for the CTA button. CTA colour auto-matches Kia (slides 1 & 3 white, others navy); to override a slide, italicise the CTA link to flip it. Add disclaimer / fine-print text here too (start it with 'Disclaimer' or '#T&C') — it renders small automatically."
         },
         {
           "component": "select",

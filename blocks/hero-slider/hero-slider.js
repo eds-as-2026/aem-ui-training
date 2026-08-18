@@ -23,21 +23,22 @@ function isAssetUrl(url) {
 }
 
 /**
- * Builds the media element (picture or video) for a slide from a single source.
- * Videos are muted, inline, and lazy except the first slide (which preloads a
- * frame so it is never blank). Images use responsive optimized sources.
- * @param {string} src media (image or video) URL
- * @param {string} unused kept for signature stability
+ * Builds the media element (picture or video) for a slide.
+ * A separate mobile source is swapped in below 769px; when empty it falls back
+ * to the desktop source. Videos are muted, inline, and lazy except the first
+ * slide (which preloads a frame so it is never blank).
+ * @param {string} desktopSrc desktop media (image or video) URL
+ * @param {string} mobileSrc optional mobile media URL
  * @param {string} alt alternative text (falls back to the slide title)
  * @param {string} poster optional poster image for videos
  * @param {boolean} eager whether this is the first slide (LCP candidate)
  */
-function buildMedia(src, unused, alt, poster, eager) {
+function buildMedia(desktopSrc, mobileSrc, alt, poster, eager) {
   const media = document.createElement('div');
   media.className = 'hero-slider-media';
-  if (!src) return media;
+  if (!desktopSrc) return media;
 
-  if (isVideo(src)) {
+  if (isVideo(desktopSrc)) {
     const video = document.createElement('video');
     video.className = 'hero-slider-video';
     video.muted = true;
@@ -49,21 +50,28 @@ function buildMedia(src, unused, alt, poster, eager) {
     video.setAttribute('aria-label', alt || '');
     if (poster) video.poster = poster;
 
-    // #t fragment renders a first frame even before playback
-    const source = document.createElement('source');
-    source.src = src.includes('#') ? src : `${src}#t=0.1`;
-    source.type = 'video/mp4';
-    video.append(source);
+    const frame = (u) => (u.includes('#') ? u : `${u}#t=0.1`);
+    const deskSource = document.createElement('source');
+    deskSource.src = frame(desktopSrc);
+    deskSource.media = '(min-width: 769px)';
+    video.append(deskSource);
+    const mobSource = document.createElement('source');
+    mobSource.src = frame(mobileSrc || desktopSrc);
+    mobSource.media = '(max-width: 768px)';
+    video.append(mobSource);
 
     media.append(video);
     return media;
   }
 
-  const pic = createOptimizedPicture(src, alt, eager, [
-    { media: '(min-width: 769px)', width: '1600' },
-    { width: '750' },
-  ]);
-  media.append(pic);
+  const desk = createOptimizedPicture(desktopSrc, alt, eager, [{ width: '1600' }]);
+  desk.classList.add('hero-slider-desktop');
+  media.append(desk);
+  if (mobileSrc) {
+    const mob = createOptimizedPicture(mobileSrc, alt, eager, [{ width: '750' }]);
+    mob.classList.add('hero-slider-mobile');
+    media.append(mob);
+  }
   return media;
 }
 
@@ -113,37 +121,42 @@ function isContentCell(cell) {
 
 const isDisclaimerText = (el) => /^\s*(disclaimer|#?t&?c|terms|\*)/i.test(el.textContent.trim());
 
+// Slides that use the white CTA on the Kia source (1-based positions 1 & 3).
+const WHITE_CTA_SLIDES = new Set([0, 2]);
+
 function buildSlide(row, index) {
   const cells = [...row.children];
 
-  // Enum cells are resolved first (exact keyword match) so they are never
-  // mistaken for content or media.
-  const ctaCell = cells.find(
-    (c) => !isMediaCell(c) && /^(navy|white)$/i.test(c.textContent.trim()),
-  );
+  // Disclaimer-alignment enum cell resolved first (exact keyword) so it is
+  // never mistaken for content or media.
   const alignCell = cells.find(
-    (c) => c !== ctaCell && !isMediaCell(c) && /^(left|center|right)$/i.test(c.textContent.trim()),
+    (c) => !isMediaCell(c) && /^(left|center|right)$/i.test(c.textContent.trim()),
   );
-  const ctaStyle = ctaCell?.textContent.trim().toLowerCase() === 'white' ? 'white' : 'navy';
   const disclaimerAlign = ['center', 'right'].includes(alignCell?.textContent.trim().toLowerCase())
     ? alignCell.textContent.trim().toLowerCase() : 'left';
 
-  // Content = a cell with a heading or link that isn't an enum cell.
-  const contentCell = cells.find((c) => c !== ctaCell && c !== alignCell && isContentCell(c));
+  // Content = a cell with a heading or link that isn't the enum cell.
+  const contentCell = cells.find((c) => c !== alignCell && isContentCell(c));
   const mediaCells = cells.filter(isMediaCell);
+
+  // CTA colour auto-matches the Kia source by slide position; an italicised CTA
+  // link flips it as a per-slide override.
+  const italicOverride = !!contentCell?.querySelector('em a, a em, i a, a i');
+  let whiteCta = WHITE_CTA_SLIDES.has(index);
+  if (italicOverride) whiteCta = !whiteCta;
 
   const slide = document.createElement('li');
   slide.className = 'hero-slider-slide';
-  slide.dataset.button = ctaStyle === 'white' ? 'light' : 'dark';
+  slide.dataset.button = whiteCta ? 'light' : 'dark';
   slide.dataset.disclaimerAlign = disclaimerAlign;
   slide.setAttribute('role', 'group');
   slide.setAttribute('aria-roledescription', 'Slide');
   moveInstrumentation(row, slide);
 
-  // single media field serves desktop and mobile
-  const mediaCell = mediaCells[0];
-  const src = mediaSrc(mediaCell);
-  const poster = mediaCell?.querySelector('img')?.getAttribute('src');
+  // separate desktop + mobile media (mobile falls back to desktop when empty)
+  const desktopSrc = mediaSrc(mediaCells[0]);
+  const mobileSrc = mediaSrc(mediaCells[1]);
+  const poster = mediaCells[0]?.querySelector('img')?.getAttribute('src');
 
   // content (title / tagline / CTA)
   const content = document.createElement('div');
@@ -169,7 +182,7 @@ function buildSlide(row, index) {
 
   inner.querySelectorAll('a').forEach((a) => a.classList.add('button'));
 
-  const media = buildMedia(src, '', altText, poster, index === 0);
+  const media = buildMedia(desktopSrc, mobileSrc, altText, poster, index === 0);
 
   slide.append(media, content);
 

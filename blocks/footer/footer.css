@@ -160,7 +160,7 @@ footer .footer .footer-columns li a:focus {
    Kia: 14px right / 6px left, no flex gap) ── */
 footer .footer .footer-social ul {
   display: flex;
-  gap: 0;
+  gap: 10px;
   margin-left: -6px;
 }
 

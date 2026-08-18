@@ -87,9 +87,20 @@ export default async function decorate(block) {
     }
   }
 
+  // Kia shows the Quick Links + Social columns without a visible heading label
+  // (the links start straight away). Mark those labels so CSS can hide them
+  // while keeping them for screen readers.
+  const quicklinksCol = footer.querySelector('.footer-quicklinks');
+  if (quicklinksCol) {
+    const qLabel = quicklinksCol.querySelector('p');
+    if (qLabel) qLabel.classList.add('footer-visually-hidden');
+  }
+
   // social: replace each link's text with an inline SVG icon (keep a11y label)
   const social = footer.querySelector('.footer-social');
   if (social) {
+    const sLabel = social.querySelector('p');
+    if (sLabel) sLabel.classList.add('footer-visually-hidden');
     social.querySelectorAll('a').forEach((a) => {
       const label = a.textContent.trim();
       const svg = iconFor(label);

@@ -186,8 +186,8 @@ footer .footer .footer-social-link:hover {
 footer .footer .footer-legal {
   margin: 40px 80px 0;
   padding-top: 0;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 11px;
+  line-height: 16px;
   color: rgb(255 255 255 / 40%);
 }
 
@@ -219,7 +219,7 @@ footer .footer .footer-home-link {
   align-items: center;
   gap: 8px;
   color: rgb(255 255 255 / 60%);
-  font-size: 14px;
+  font-size: 11px;
 }
 
 footer .footer .footer-home-link svg {

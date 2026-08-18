@@ -350,4 +350,26 @@ footer .footer .footer-legal a:hover {
   footer .footer .footer-social {
     margin-top: 20px;
   }
+
+  /* Bottom legal: plain left-aligned stack on mobile (Home, then contact
+     lines below) — drop the desktop absolute Home + 46% contact offset. */
+  footer .footer .footer-legal > div {
+    display: block;
+    min-height: 0;
+  }
+
+  footer .footer .footer-legal-home {
+    position: static;
+    margin: 0 0 12px;
+  }
+
+  footer .footer .footer-legal-contact {
+    width: auto;
+    margin-left: 0;
+    text-align: left;
+  }
+
+  footer .footer .footer-legal-row {
+    display: block;
+  }
 }

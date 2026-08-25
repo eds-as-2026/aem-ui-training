@@ -156,10 +156,15 @@ footer .footer .footer-column li a:focus {
 
 /* ── Bottom legal band ── */
 footer .footer .footer-legal {
+  margin-top: 130px;
+}
+
+/* copyright (left) + privacy (right); this class sits on the actual container
+   whether or not the EDS pipeline wrapped it in a .default-content-wrapper */
+footer .footer .footer-legal-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 130px;
 }
 
 footer .footer .footer-legal .footer-copyright p {

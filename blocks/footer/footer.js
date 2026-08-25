@@ -73,6 +73,9 @@ export default async function decorate(block) {
     const privacyParas = privacyIdx >= 0 ? paras.slice(privacyIdx) : [];
 
     wrapper.textContent = '';
+    // tag the actual container so CSS lays out copyright/privacy left/right
+    // regardless of the EDS content wrapper (present on live, absent locally)
+    wrapper.classList.add('footer-legal-row');
     const copyright = document.createElement('div');
     copyright.className = 'footer-copyright';
     copyParas.forEach((p) => copyright.append(p));

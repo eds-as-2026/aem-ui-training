@@ -305,5 +305,45 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "video",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "video",
+        "label": "Video",
+        "multi": false
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "poster",
+        "label": "Poster Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "posterAlt",
+        "label": "Poster Alt Text",
+        "value": ""
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "loop",
+        "label": "Loop",
+        "value": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "controls",
+        "label": "Show Controls",
+        "value": false
+      }
+    ]
   }
 ]
